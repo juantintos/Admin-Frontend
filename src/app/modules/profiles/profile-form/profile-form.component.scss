@@ -1,0 +1,34 @@
+.permissions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.permission-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  color: #495057;
+
+  i { font-size: 1.1rem; color: #adb5bd; }
+
+  &:hover {
+    border-color: #6c63ff;
+    background: #f8f7ff;
+  }
+
+  &.selected {
+    border-color: #6c63ff;
+    background: #f0eeff;
+    color: #6c63ff;
+    font-weight: 600;
+
+    i { color: #6c63ff; }
+  }
+}

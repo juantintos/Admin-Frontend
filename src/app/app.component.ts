@@ -2,10 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  standalone: false,
-  styleUrl: './app.component.scss'
+  template: `<router-outlet></router-outlet>`,
 })
-export class AppComponent {
-  title = 'admin-frontend';
-}
+export class AppComponent {}

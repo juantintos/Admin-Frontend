@@ -1,0 +1,119 @@
+<p-dialog
+  [header]="isEdit ? 'Editar usuario' : 'Nuevo usuario'"
+  [visible]="visible"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '540px' }"
+  [draggable]="false"
+>
+  <form [formGroup]="form" novalidate>
+
+    <!-- Avatar -->
+    <div class="avatar-section">
+      <div class="avatar-preview">
+        <img *ngIf="avatarPreview" [src]="avatarPreview" alt="Avatar" />
+        <div *ngIf="!avatarPreview" class="avatar-placeholder">
+          <i class="pi pi-user"></i>
+        </div>
+      </div>
+      <div class="avatar-upload">
+        <label class="upload-label">
+          Foto de perfil <span class="required">*</span>
+        </label>
+        <input type="file" accept="image/jpg,image/jpeg,image/png"
+               (change)="onAvatarSelected($event)" #avatarInput hidden />
+        <button pButton type="button" icon="pi pi-upload"
+                label="Seleccionar imagen"
+                class="p-button-outlined p-button-sm"
+                (click)="avatarInput.click()"></button>
+        <small style="color:#6c757d">JPG o PNG, máximo 2MB</small>
+      </div>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="form-grid">
+      <!-- Nombre -->
+      <div class="field col-full">
+        <label>Nombre <span class="required">*</span></label>
+        <input pInputText formControlName="name" placeholder="Nombre completo"
+               [class.ng-invalid]="f['name'].invalid && f['name'].touched" />
+        <small class="error" *ngIf="f['name'].invalid && f['name'].touched">
+          El nombre es requerido.
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="field col-full">
+        <label>Email <span class="required">*</span></label>
+        <input pInputText type="email" formControlName="email" placeholder="correo@ejemplo.com"
+               [class.ng-invalid]="f['email'].invalid && f['email'].touched" />
+        <small class="error" *ngIf="f['email'].invalid && f['email'].touched">
+          Ingresa un email válido.
+        </small>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="field col-full">
+        <label>
+          Contraseña
+          <span class="required" *ngIf="!isEdit">*</span>
+          <small *ngIf="isEdit" style="color:#6c757d; font-weight:400">
+            (dejar en blanco para no cambiar)
+          </small>
+        </label>
+        <input pInputText type="password" formControlName="password"
+               placeholder="Mínimo 8 caracteres"
+               [class.ng-invalid]="f['password'].invalid && f['password'].touched" />
+        <small class="error" *ngIf="f['password'].invalid && f['password'].touched">
+          Mínimo 8 caracteres.
+        </small>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="field col-half">
+        <label>Código de país</label>
+        <p-dropdown formControlName="phone_code"
+                    [options]="phoneCodes"
+                    placeholder="Código"></p-dropdown>
+      </div>
+
+      <div class="field col-half">
+        <label>Teléfono</label>
+        <input pInputText formControlName="phone" placeholder="Ej: 3312345678" />
+      </div>
+
+      <!-- Perfil -->
+      <div class="field col-full">
+        <label>Perfil <span class="required">*</span></label>
+        <p-dropdown formControlName="profile_id"
+                    [options]="profileOptions"
+                    placeholder="Selecciona un perfil"
+                    [class.ng-invalid]="f['profile_id'].invalid && f['profile_id'].touched">
+        </p-dropdown>
+        <small class="error" *ngIf="f['profile_id'].invalid && f['profile_id'].touched">
+          El perfil es requerido.
+        </small>
+      </div>
+
+      <!-- Estado (solo en edición) -->
+      <div class="field col-full" *ngIf="isEdit">
+        <label>Estado</label>
+        <div class="checkbox-row">
+          <p-checkbox formControlName="is_active" [binary]="true" inputId="isActive"></p-checkbox>
+          <label for="isActive" style="cursor:pointer">Usuario activo</label>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times"
+            class="p-button-text" (click)="close()"></button>
+    <button pButton [label]="isEdit ? 'Actualizar' : 'Crear'"
+            icon="pi pi-check"
+            [loading]="loading"
+            (click)="submit()"></button>
+  </ng-template>
+</p-dialog>

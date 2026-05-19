@@ -1,0 +1,51 @@
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e9ecef;
+  flex-shrink: 0;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i { font-size: 2rem; color: #adb5bd; }
+}
+
+.avatar-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  .upload-label { font-weight: 600; font-size: 0.875rem; color: #495057; }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+
+  .col-full { grid-column: 1 / -1; }
+  .col-half { grid-column: span 1; }
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

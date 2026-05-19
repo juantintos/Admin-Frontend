@@ -1,0 +1,130 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="card-header">
+      <h2><i class="pi pi-id-card"></i> Perfiles</h2>
+      <div class="header-actions">
+        <button pButton icon="pi pi-file-pdf"   label="PDF"
+                class="p-button-outlined p-button-danger p-button-sm"
+                (click)="exportPdf()"></button>
+        <button pButton icon="pi pi-file-excel" label="Excel"
+                class="p-button-outlined p-button-success p-button-sm"
+                (click)="exportExcel()"></button>
+        <button pButton icon="pi pi-plus" label="Nuevo perfil"
+                class="p-button-sm" (click)="openCreate()"></button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Filtros -->
+  <div class="filters-row">
+    <input pInputText [(ngModel)]="search"
+           placeholder="Buscar por nombre..."
+           (keyup.enter)="load()" class="filter-input" />
+    <button pButton icon="pi pi-search" label="Buscar"
+            class="p-button-sm" (click)="load()"></button>
+  </div>
+
+  <!-- Tabla -->
+  <p-table [value]="profiles" [loading]="loading"
+           responsiveLayout="scroll"
+           styleClass="p-datatable-sm p-datatable-striped">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Permisos</th>
+        <th>Usuarios</th>
+        <th>Creación</th>
+        <th style="width:140px; text-align:center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-profile>
+      <tr>
+        <td><p-tag [value]="profile.code" severity="info"></p-tag></td>
+        <td><strong>{{ profile.name }}</strong></td>
+        <td>
+          <div class="chips-row">
+            <p-chip *ngFor="let perm of profile.permissions"
+                    [label]="permissionLabel(perm)"></p-chip>
+          </div>
+        </td>
+        <td style="text-align:center">
+          <p-badge [value]="profile.users_count ?? 0" severity="info"></p-badge>
+        </td>
+        <td>{{ profile.created_at | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <div class="action-buttons">
+            <button pButton icon="pi pi-eye"
+                    class="p-button-rounded p-button-text p-button-info p-button-sm"
+                    pTooltip="Ver detalle" (click)="openDetail(profile)"></button>
+            <button pButton icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text p-button-warning p-button-sm"
+                    pTooltip="Editar" (click)="openEdit(profile)"></button>
+            <button pButton icon="pi pi-trash"
+                    class="p-button-rounded p-button-text p-button-danger p-button-sm"
+                    pTooltip="Eliminar" (click)="confirmDelete(profile)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align:center; padding:2rem; color:#999">
+          <i class="pi pi-inbox" style="font-size:2rem; display:block; margin-bottom:.5rem"></i>
+          Sin perfiles
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator [rows]="rows" [totalRecords]="totalRecords"
+               [rowsPerPageOptions]="[10,15,25,50]"
+               (onPageChange)="onPageChange($event)"></p-paginator>
+</p-card>
+
+<!-- Modal detalle -->
+<p-dialog header="Detalle de perfil" [(visible)]="showDetail"
+          [modal]="true" [style]="{ width: '440px' }" [draggable]="false">
+  <div *ngIf="detailProfile" class="profile-detail">
+    <div class="detail-row"><span>Código</span><strong>{{ detailProfile.code }}</strong></div>
+    <div class="detail-row"><span>Nombre</span><strong>{{ detailProfile.name }}</strong></div>
+    <div class="detail-row">
+      <span>Usuarios asignados</span>
+      <p-badge [value]="detailProfile.users_count ?? 0" severity="info"></p-badge>
+    </div>
+    <div class="detail-row"><span>Creación</span>
+      <strong>{{ detailProfile.created_at | date:'dd/MM/yyyy HH:mm' }}</strong>
+    </div>
+
+    <p-divider></p-divider>
+    <p style="font-weight:600; margin-bottom:.75rem">Permisos</p>
+    <div class="chips-row">
+      <p-chip *ngFor="let perm of detailProfile.permissions"
+              [label]="permissionLabel(perm)" icon="pi pi-check"></p-chip>
+      <span *ngIf="!detailProfile.permissions?.length" style="color:#999">
+        Sin permisos asignados
+      </span>
+    </div>
+
+    <ng-container *ngIf="detailProfile.users?.length">
+      <p-divider></p-divider>
+      <p style="font-weight:600; margin-bottom:.75rem">Usuarios con este perfil</p>
+      <div *ngFor="let u of detailProfile.users" class="user-item">
+        <i class="pi pi-user"></i> {{ u.name }} — <small>{{ u.email }}</small>
+      </div>
+    </ng-container>
+  </div>
+</p-dialog>
+
+<!-- Modal formulario -->
+<app-profile-form
+  [visible]="showForm"
+  [profile]="editProfile"
+  (visibleChange)="showForm = $event"
+  (saved)="onFormSaved()"
+></app-profile-form>

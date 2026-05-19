@@ -1,0 +1,20 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-logo">
+      <i class="pi pi-shield"></i>
+      AdminSystem
+    </span>
+  </div>
+
+  <nav class="sidebar-nav">
+    
+    <a *ngFor="let item of visibleItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <i [class]="item.icon"></i>
+      <span>{{ item.label }}</span>
+    </a>
+  </nav>
+</div>

@@ -1,0 +1,45 @@
+<p-dialog
+  [header]="isEdit ? 'Editar perfil' : 'Nuevo perfil'"
+  [visible]="visible"
+  (visibleChange)="close()"
+  [modal]="true"
+  [style]="{ width: '440px' }"
+  [draggable]="false"
+>
+  <form [formGroup]="form" novalidate>
+
+    <div class="field">
+      <label>Nombre del perfil <span class="required">*</span></label>
+      <input pInputText formControlName="name" placeholder="Ej: Vendedor"
+             [class.ng-invalid]="f['name'].invalid && f['name'].touched" />
+      <small class="error" *ngIf="f['name'].invalid && f['name'].touched">
+        El nombre es requerido.
+      </small>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="field">
+      <label>Permisos <span class="required">*</span></label>
+      <div class="permissions-grid">
+        <div *ngFor="let perm of permissions"
+             class="permission-item"
+             [class.selected]="isSelected(perm.value)"
+             (click)="togglePermission(perm.value)">
+          <i class="pi" [class.pi-check-circle]="isSelected(perm.value)"
+                        [class.pi-circle]="!isSelected(perm.value)"></i>
+          {{ perm.label }}
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancelar" icon="pi pi-times"
+            class="p-button-text" (click)="close()"></button>
+    <button pButton [label]="isEdit ? 'Actualizar' : 'Crear'"
+            icon="pi pi-check" [loading]="loading"
+            (click)="submit()"></button>
+  </ng-template>
+</p-dialog>

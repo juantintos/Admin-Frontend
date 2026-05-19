@@ -1,0 +1,56 @@
+<div class="login-wrapper">
+  <p-toast></p-toast>
+
+  <div class="login-card">
+    <div class="login-header">
+      <i class="pi pi-shield login-icon"></i>
+      <h1>AdminSystem</h1>
+      <p>Inicia sesión para continuar</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          placeholder="admin@ejemplo.com"
+          [class.ng-invalid]="f['email'].invalid && f['email'].touched"
+        />
+        <small class="error" *ngIf="f['email'].invalid && f['email'].touched">
+          Ingresa un correo válido.
+        </small>
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          placeholder="••••••••"
+          [class.ng-invalid]="f['password'].invalid && f['password'].touched"
+        />
+        <small class="error" *ngIf="f['password'].invalid && f['password'].touched">
+          Mínimo 6 caracteres.
+        </small>
+      </div>
+
+      <button
+        pButton
+        type="submit"
+        label="Iniciar sesión"
+        icon="pi pi-sign-in"
+        [loading]="loading"
+        class="p-button-primary w-full"
+      ></button>
+    </form>
+
+    <a routerLink="/auth/forgot-password" class="forgot-link">
+      ¿Olvidaste tu contraseña?
+    </a>
+  </div>
+</div>

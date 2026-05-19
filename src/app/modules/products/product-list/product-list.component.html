@@ -1,0 +1,106 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="card-header">
+      <h2><i class="pi pi-box"></i> Productos</h2>
+      <div class="header-actions">
+        <button pButton icon="pi pi-file-pdf"  label="PDF"
+                class="p-button-outlined p-button-danger p-button-sm"
+                (click)="exportPdf()"></button>
+        <button pButton icon="pi pi-file-excel" label="Excel"
+                class="p-button-outlined p-button-success p-button-sm"
+                (click)="exportExcel()"></button>
+        <button pButton icon="pi pi-plus" label="Nuevo producto"
+                class="p-button-sm"
+                (click)="openCreate()"></button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Filtros -->
+  <div class="filters-row">
+    <input pInputText
+           [(ngModel)]="filters.search"
+           placeholder="Buscar por nombre, código o marca..."
+           (keyup.enter)="load()"
+           class="filter-input" />
+    <p-inputNumber [(ngModel)]="filters.price_min"
+                   placeholder="Precio mín"
+                   [min]="0" [max]="999"
+                   class="filter-input-sm"></p-inputNumber>
+    <p-inputNumber [(ngModel)]="filters.price_max"
+                   placeholder="Precio máx"
+                   [min]="0" [max]="999"
+                   class="filter-input-sm"></p-inputNumber>
+    <button pButton icon="pi pi-search" label="Buscar"
+            class="p-button-sm" (click)="load()"></button>
+  </div>
+
+  <!-- Tabla -->
+  <p-table
+    [value]="products"
+    [loading]="loading"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-sm p-datatable-striped"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Marca</th>
+        <th>Precio</th>
+        <th>Fecha creación</th>
+        <th style="width:130px; text-align:center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td><p-tag [value]="product.code" severity="info"></p-tag></td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.brand }}</td>
+        <td><strong>${{ product.price | number:'1.2-2' }}</strong></td>
+        <td>{{ product.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <div class="action-buttons">
+            <button pButton icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text p-button-warning p-button-sm"
+                    pTooltip="Editar"
+                    (click)="openEdit(product)"></button>
+            <button pButton icon="pi pi-trash"
+                    class="p-button-rounded p-button-text p-button-danger p-button-sm"
+                    pTooltip="Eliminar"
+                    (click)="confirmDelete(product)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align:center; padding:2rem; color:#999">
+          <i class="pi pi-inbox" style="font-size:2rem; display:block; margin-bottom:.5rem"></i>
+          Sin productos
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Paginador -->
+  <p-paginator
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="[10,15,25,50]"
+    (onPageChange)="onPageChange($event)"
+  ></p-paginator>
+</p-card>
+
+<!-- Modal formulario -->
+<app-product-form
+  [visible]="showForm"
+  [product]="editProduct"
+  (visibleChange)="showForm = $event"
+  (saved)="onFormSaved()"
+></app-product-form>

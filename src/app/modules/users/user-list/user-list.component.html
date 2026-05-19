@@ -1,0 +1,164 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="card-header">
+      <h2><i class="pi pi-users"></i> Usuarios</h2>
+      <div class="header-actions">
+        <button pButton icon="pi pi-file-pdf"   label="PDF"
+                class="p-button-outlined p-button-danger p-button-sm"
+                (click)="exportPdf()"></button>
+        <button pButton icon="pi pi-file-excel" label="Excel"
+                class="p-button-outlined p-button-success p-button-sm"
+                (click)="exportExcel()"></button>
+        <button pButton icon="pi pi-plus" label="Nuevo usuario"
+                class="p-button-sm" (click)="openCreate()"></button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Filtros -->
+  <div class="filters-row">
+    <input pInputText [(ngModel)]="filters.search"
+           placeholder="Buscar por nombre, email o código..."
+           (keyup.enter)="load()" class="filter-input" />
+    <p-dropdown [options]="statusOptions"
+                [(ngModel)]="filters.is_active"
+                placeholder="Estado"
+                [style]="{'width':'150px'}"></p-dropdown>
+    <p-dropdown [options]="profileOptions()"
+                [(ngModel)]="filters.profile_id"
+                placeholder="Perfil"
+                [style]="{'width':'180px'}"></p-dropdown>
+    <button pButton icon="pi pi-search" label="Buscar"
+            class="p-button-sm" (click)="load()"></button>
+  </div>
+
+  <!-- Tabla -->
+  <p-table [value]="users" [loading]="loading"
+           responsiveLayout="scroll"
+           styleClass="p-datatable-sm p-datatable-striped">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Avatar</th>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Perfil</th>
+        <th>Estado</th>
+        <th style="width:140px; text-align:center">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>
+          <p-avatar
+            [image]="user.avatar"
+            [label]="!user.avatar ? user.name.charAt(0).toUpperCase() : ''"
+            shape="circle"
+            size="normal"
+          ></p-avatar>
+        </td>
+        <td><p-tag [value]="user.code" severity="info"></p-tag></td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone_code }} {{ user.phone || '—' }}</td>
+        <td>
+          <p-tag *ngIf="user.profile"
+                 [value]="user.profile.name"
+                 severity="warning"></p-tag>
+          <span *ngIf="!user.profile" style="color:#999">Sin perfil</span>
+        </td>
+        <td>
+          <p-tag [value]="user.is_active ? 'Activo' : 'Inactivo'"
+                 [severity]="user.is_active ? 'success' : 'danger'"></p-tag>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button pButton icon="pi pi-eye"
+                    class="p-button-rounded p-button-text p-button-info p-button-sm"
+                    pTooltip="Ver detalle"
+                    (click)="openDetail(user)"></button>
+            <button pButton icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text p-button-warning p-button-sm"
+                    pTooltip="Editar"
+                    (click)="openEdit(user)"></button>
+            <button pButton icon="pi pi-trash"
+                    class="p-button-rounded p-button-text p-button-danger p-button-sm"
+                    pTooltip="Eliminar"
+                    (click)="confirmDelete(user)"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8" style="text-align:center; padding:2rem; color:#999">
+          <i class="pi pi-inbox" style="font-size:2rem; display:block; margin-bottom:.5rem"></i>
+          Sin usuarios
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator [rows]="rows" [totalRecords]="totalRecords"
+               [rowsPerPageOptions]="[10,15,25,50]"
+               (onPageChange)="onPageChange($event)"></p-paginator>
+</p-card>
+
+<!-- Modal detalle -->
+<p-dialog header="Detalle de usuario" [(visible)]="showDetail"
+          [modal]="true" [style]="{ width: '480px' }" [draggable]="false">
+  <div *ngIf="detailUser" class="user-detail">
+    <div class="detail-avatar">
+      <p-avatar [image]="detailUser.avatar"
+                [label]="!detailUser.avatar ? detailUser.name.charAt(0).toUpperCase() : ''"
+                shape="circle" size="xlarge"></p-avatar>
+    </div>
+    <div class="detail-row"><span>Código</span><strong>{{ detailUser.code }}</strong></div>
+    <div class="detail-row"><span>Nombre</span><strong>{{ detailUser.name }}</strong></div>
+    <div class="detail-row"><span>Email</span><strong>{{ detailUser.email }}</strong></div>
+    <div class="detail-row">
+      <span>Teléfono</span>
+      <strong>{{ detailUser.phone_code }} {{ detailUser.phone || '—' }}</strong>
+    </div>
+    <div class="detail-row">
+      <span>Perfil</span>
+      <p-tag *ngIf="detailUser.profile"
+             [value]="detailUser.profile.name" severity="warning"></p-tag>
+    </div>
+    <div class="detail-row">
+      <span>Estado</span>
+      <p-tag [value]="detailUser.is_active ? 'Activo' : 'Inactivo'"
+             [severity]="detailUser.is_active ? 'success' : 'danger'"></p-tag>
+    </div>
+    <div class="detail-row">
+      <span>Registro</span>
+      <strong>{{ detailUser.created_at | date:'dd/MM/yyyy HH:mm' }}</strong>
+    </div>
+
+    <!-- Permisos del perfil -->
+    <p-divider></p-divider>
+    <p style="font-weight:600; margin-bottom:.5rem">Permisos del perfil</p>
+    <div class="permissions-row">
+      <p-chip *ngFor="let perm of detailUser.profile?.permissions"
+              [label]="perm" icon="pi pi-check"></p-chip>
+      <span *ngIf="!detailUser.profile?.permissions?.length" style="color:#999">
+        Sin permisos
+      </span>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Modal formulario -->
+<app-user-form
+  [visible]="showForm"
+  [user]="editUser"
+  [profiles]="profiles"
+  (visibleChange)="showForm = $event"
+  (saved)="onFormSaved()"
+></app-user-form>

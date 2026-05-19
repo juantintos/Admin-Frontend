@@ -1,0 +1,18 @@
+<div class="header">
+  <div class="header-left">
+    <span class="page-title">Panel de Administración</span>
+  </div>
+  <div class="header-right">
+    <span class="user-name">
+      <i class="pi pi-user"></i>
+      {{ user?.name }}
+    </span>
+    <button
+      pButton
+      icon="pi pi-sign-out"
+      label="Salir"
+      class="p-button-text p-button-sm"
+      (click)="logout()"
+    ></button>
+  </div>
+</div>
