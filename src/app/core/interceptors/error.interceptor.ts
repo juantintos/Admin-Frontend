@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   HttpEvent, HttpHandler, HttpInterceptor,
-  HttpRequest, HttpErrorResponse
+  HttpRequest, HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(
-    private authService: AuthService,
+    private authService:    AuthService,
     private messageService: MessageService,
   ) {}
 
@@ -22,37 +22,21 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.authService.logout();
           return throwError(() => error);
         }
-
         if (error.status === 403) {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Sin acceso',
-            detail: 'No tienes permiso para realizar esta acción.',
-          });
+          this.messageService.add({ severity: 'warn', summary: 'Sin acceso', detail: 'No tienes permiso.' });
           return throwError(() => error);
         }
-
         if (error.status === 422) {
           const errors = error.error?.errors;
           if (errors) {
-            const firstError = Object.values(errors)[0] as string[];
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error de validación',
-              detail: firstError[0],
-            });
+            const first = Object.values(errors)[0] as string[];
+            this.messageService.add({ severity: 'error', summary: 'Validación', detail: first[0] });
           }
           return throwError(() => error);
         }
-
         if (error.status >= 500) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error del servidor',
-            detail: 'Ocurrió un error inesperado. Intenta nuevamente.',
-          });
+          this.messageService.add({ severity: 'error', summary: 'Error servidor', detail: 'Error inesperado.' });
         }
-
         return throwError(() => error);
       })
     );

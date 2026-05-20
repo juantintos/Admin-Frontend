@@ -9,10 +9,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
+  declarations: [
     ProductListComponent,
-    ProductFormComponent],
+    ProductFormComponent,
+  ],
+  imports: [SharedModule, RouterModule.forChild(routes)],
 })
 export class ProductsModule {}

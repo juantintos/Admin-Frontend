@@ -9,10 +9,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
+    declarations: [
     UserListComponent,
-    UserFormComponent],
+    UserFormComponent,
+  ],
+  imports: [
+    SharedModule,   
+    RouterModule.forChild(routes),
+    ],
 })
 export class UsersModule {}

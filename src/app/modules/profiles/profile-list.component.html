@@ -95,26 +95,26 @@
     <div class="detail-row"><span>Nombre</span><strong>{{ detailProfile.name }}</strong></div>
     <div class="detail-row">
       <span>Usuarios asignados</span>
-      <p-badge [value]="detailProfile.users_count ?? 0" severity="info"></p-badge>
+      <p-badge [value]="detailProfile?.users_count ?? 0" severity="info"></p-badge>
     </div>
     <div class="detail-row"><span>Creación</span>
-      <strong>{{ detailProfile.created_at | date:'dd/MM/yyyy HH:mm' }}</strong>
+      <strong>{{ detailProfile?.created_at | date:'dd/MM/yyyy HH:mm' }}</strong>
     </div>
 
     <p-divider></p-divider>
     <p style="font-weight:600; margin-bottom:.75rem">Permisos</p>
     <div class="chips-row">
-      <p-chip *ngFor="let perm of detailProfile.permissions"
+      <p-chip *ngFor="let perm of detailProfile?.permissions"
               [label]="permissionLabel(perm)" icon="pi pi-check"></p-chip>
-      <span *ngIf="!detailProfile.permissions?.length" style="color:#999">
+      <span *ngIf="!detailProfile?.permissions?.length" style="color:#999">
         Sin permisos asignados
       </span>
     </div>
 
-    <ng-container *ngIf="detailProfile.users?.length">
+    <ng-container *ngIf="detailProfile?.users?.length">
       <p-divider></p-divider>
       <p style="font-weight:600; margin-bottom:.75rem">Usuarios con este perfil</p>
-      <div *ngFor="let u of detailProfile.users" class="user-item">
+      <div *ngFor="let u of detailProfile?.users" class="user-item">
         <i class="pi pi-user"></i> {{ u.name }} — <small>{{ u.email }}</small>
       </div>
     </ng-container>

@@ -11,10 +11,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [
+    LoginComponent,
+    ForgotPasswordComponent,
+  ],
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    LoginComponent,
-    ForgotPasswordComponent],
+  ],
 })
 export class AuthModule {}

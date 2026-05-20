@@ -14,22 +14,9 @@ import { Component } from '@angular/core';
     </div>
   `,
   styles: [`
-    .layout-wrapper {
-      display: flex;
-      min-height: 100vh;
-    }
-    .layout-main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #f8f9fa;
-      overflow: hidden;
-    }
-    .layout-content {
-      flex: 1;
-      padding: 1.5rem;
-      overflow-y: auto;
-    }
+    .layout-wrapper { display: flex; min-height: 100vh; }
+    .layout-main { flex: 1; display: flex; flex-direction: column; background: #f8f9fa; }
+    .layout-content { flex: 1; padding: 1.5rem; overflow-y: auto; }
   `],
 })
 export class LayoutComponent {}

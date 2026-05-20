@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProfileService } from '../../core/services/profile.service';
 import { ExportService } from '../../core/services/export.service';
 import { Profile } from '../../core/models/profile.model';
-import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-profile-list',
   templateUrl: './profile-list.component.html',
+  styleUrls: ['./profile-list.component.scss'],
 })
 export class ProfileListComponent implements OnInit {
-  profiles:     Profile[] = [];
-  loading       = false;
-  totalRecords  = 0;
-  rows          = 15;
-  currentPage   = 1;
-  search        = '';
-
-  showForm    = false;
-  showDetail  = false;
+  profiles:    Profile[] = [];
+  loading      = false;
+  totalRecords = 0;
+  rows         = 15;
+  currentPage  = 1;
+  search       = '';
+  showForm     = false;
+  showDetail   = false;
   editProfile:   Profile | null = null;
   detailProfile: Profile | null = null;
 
@@ -33,57 +33,32 @@ export class ProfileListComponent implements OnInit {
   load(): void {
     this.loading = true;
     this.profileService.getAll({ search: this.search, per_page: this.rows, page: this.currentPage }).subscribe({
-      next: res => {
-        this.profiles    = res.data.items;
-        this.totalRecords = res.data.total;
-        this.loading     = false;
-      },
+      next: res => { this.profiles = res.data.items; this.totalRecords = res.data.total; this.loading = false; },
       error: () => { this.loading = false; },
     });
   }
 
-  onPageChange(event: any): void {
-    this.currentPage = Math.floor(event.first / event.rows) + 1;
-    this.rows        = event.rows;
-    this.load();
-  }
-
+  onPageChange(e: any): void { this.currentPage = Math.floor(e.first / e.rows) + 1; this.rows = e.rows; this.load(); }
   openCreate(): void { this.editProfile = null; this.showForm = true; }
-
-  openEdit(profile: Profile): void { this.editProfile = { ...profile }; this.showForm = true; }
-
-  openDetail(profile: Profile): void { this.detailProfile = profile; this.showDetail = true; }
-
+  openEdit(p: Profile): void { this.editProfile = { ...p }; this.showForm = true; }
+  openDetail(p: Profile): void { this.detailProfile = p; this.showDetail = true; }
   onFormSaved(): void { this.showForm = false; this.load(); }
 
   confirmDelete(profile: Profile): void {
     this.confirmService.confirm({
-      message: `¿Eliminar el perfil <strong>${profile.name}</strong>?`,
-      header:  'Confirmar eliminación',
-      icon:    'pi pi-exclamation-triangle',
-      acceptLabel: 'Sí, eliminar',
-      rejectLabel: 'Cancelar',
+      message: `¿Eliminar <strong>${profile.name}</strong>?`,
+      header: 'Confirmar', icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, eliminar', rejectLabel: 'Cancelar',
       acceptButtonStyleClass: 'p-button-danger',
-      accept: () => this.delete(profile.id),
+      accept: () => this.profileService.delete(profile.id).subscribe({
+        next: () => { this.messageService.add({ severity: 'success', summary: 'Eliminado', detail: 'Perfil eliminado.' }); this.load(); },
+        error: err => { this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message ?? 'No se pudo eliminar.' }); },
+      }),
     });
   }
 
-  private delete(id: string): void {
-    this.profileService.delete(id).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success', summary: 'Eliminado',
-          detail: 'Perfil eliminado correctamente.',
-        });
-        this.load();
-      },
-      error: err => {
-        this.messageService.add({
-          severity: 'error', summary: 'Error',
-          detail: err.error?.message ?? 'No se pudo eliminar el perfil.',
-        });
-      },
-    });
+  permissionLabel(p: string): string {
+    return ({ products: 'Productos', users: 'Usuarios', profiles: 'Perfiles' } as any)[p] ?? p;
   }
 
   exportPdf(): void {
@@ -96,9 +71,5 @@ export class ProfileListComponent implements OnInit {
     this.profileService.exportExcel().subscribe(blob =>
       this.exportService.downloadBlob(blob, this.exportService.buildFilename('perfiles', 'xlsx'))
     );
-  }
-
-  permissionLabel(perm: string): string {
-    return { products: 'Productos', users: 'Usuarios', profiles: 'Perfiles' }[perm] ?? perm;
   }
 }

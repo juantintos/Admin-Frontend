@@ -8,10 +8,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
-    DashboardComponent,
-  ],
+  declarations: [DashboardComponent],
+  imports: [SharedModule, RouterModule.forChild(routes)],
 })
 export class DashboardModule {}

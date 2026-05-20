@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
 import { MessageService } from 'primeng/api';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,22 +28,13 @@ export class LoginComponent {
   get f() { return this.form.controls; }
 
   submit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
+    if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.loading = true;
-
     this.authService.login(this.form.value).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: (err) => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.error?.message ?? 'Credenciales incorrectas.',
-        });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message ?? 'Credenciales incorrectas.' });
       },
     });
   }
