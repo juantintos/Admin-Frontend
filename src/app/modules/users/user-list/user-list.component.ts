@@ -7,6 +7,7 @@ import { User, UserFilters } from '../../../core/models/user.model';
 import { Profile } from '../../../core/models/profile.model';
 
 @Component({
+  standalone: false,
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],

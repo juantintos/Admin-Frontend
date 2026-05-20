@@ -3,6 +3,7 @@ import { AuthService } from '../../../services/auth.service';
 import { AuthUser } from '../../../models/auth.model';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

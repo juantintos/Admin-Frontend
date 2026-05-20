@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ProfileService } from '../../core/services/profile.service';
-import { ExportService } from '../../core/services/export.service';
-import { Profile } from '../../core/models/profile.model';
+import { ProfileService } from '../../../core/services/profile.service';
+import { ExportService } from '../../../core/services/export.service';
+import { Profile } from '../../../core/models/profile.model';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-list',
   templateUrl: './profile-list.component.html',
   styleUrls: ['./profile-list.component.scss'],

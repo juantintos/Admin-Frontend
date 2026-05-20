@@ -6,6 +6,7 @@ import { User } from '../../../core/models/user.model';
 import { Profile } from '../../../core/models/profile.model';
 
 @Component({
+  standalone: false,
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],

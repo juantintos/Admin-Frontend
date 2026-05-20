@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuditLogService } from '../../core/services/audit-log.service';
-import { AuditLog, AuditLogFilters } from '../../core/models/audit-log.model';
+import { AuditLogService } from '../../../core/services/audit-log.service';
+import { AuditLog, AuditLogFilters } from '../../../core/models/audit-log.model';
 
 @Component({
+  standalone: false,
   selector: 'app-audit-log-list',
   templateUrl: './audit-log-list.component.html',
   styleUrls: ['./audit-log-list.component.scss'],

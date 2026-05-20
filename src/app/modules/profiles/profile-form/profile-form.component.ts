@@ -5,6 +5,7 @@ import { ProfileService } from '../../../core/services/profile.service';
 import { Profile, AVAILABLE_PERMISSIONS } from '../../../core/models/profile.model';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss'],

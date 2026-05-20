@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

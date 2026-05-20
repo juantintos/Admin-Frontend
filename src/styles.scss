@@ -1,4 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 
@@ -16,28 +15,18 @@ body {
   color: #1a1a2e;
 }
 
-// Campos de formulario
 .field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
   margin-bottom: 1.25rem;
 
-  label {
-    font-weight: 600;
-    font-size: 0.875rem;
-    color: #495057;
-  }
-
-  input, p-inputNumber, p-dropdown {
-    width: 100%;
-  }
-
+  label { font-weight: 600; font-size: 0.875rem; color: #495057; }
+  input, p-inputNumber, p-dropdown { width: 100%; }
   .error    { color: #e24c4c; font-size: 0.8rem; }
   .required { color: #e24c4c; }
 }
 
-// Cabecera de tarjeta
 .card-header {
   display: flex;
   align-items: center;
@@ -52,17 +41,11 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-
     i { color: #6c63ff; }
   }
-
-  .header-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
+  .header-actions { display: flex; gap: 0.5rem; }
 }
 
-// Filtros
 .filters-row {
   display: flex;
   gap: 0.75rem;
@@ -74,7 +57,6 @@ body {
   .filter-input-sm { width: 130px; }
 }
 
-// Botones de acción en tabla
 .action-buttons {
   display: flex;
   gap: 0.25rem;

@@ -5,6 +5,7 @@ import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/product.model';
 
 @Component({
+  standalone: false,
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
 })

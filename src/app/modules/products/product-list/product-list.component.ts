@@ -5,6 +5,7 @@ import { ExportService } from '../../../core/services/export.service';
 import { Product, ProductFilters } from '../../../core/models/product.model';
 
 @Component({
+  standalone: false,
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
 })
