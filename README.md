@@ -68,3 +68,4 @@ Paginación server-side
 Badges de estado
 Diseño responsivo
 
+<img width="3548" height="2928" alt="diagram (1)" src="https://github.com/user-attachments/assets/4af6ebd1-23b7-4db8-97fa-21c60c84e773" />
