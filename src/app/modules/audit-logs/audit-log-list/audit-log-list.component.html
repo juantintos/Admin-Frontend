@@ -65,10 +65,10 @@
         <td>
           <ng-container *ngIf="hasChanges(log)">
             <div *ngFor="let key of changeKeys(log)" class="change-line">
-              <span class="change-key">{{ key }}</span>
-              <span class="change-from">{{ log.changes[key].from ?? '—' }}</span>
+              <span class="change-key">{{ formatFieldName(key) }}</span>
+              <span class="change-from">{{ log.changes[key].from | safeValue }}</span>
               <i class="pi pi-arrow-right"></i>
-              <span class="change-to">{{ log.changes[key].to ?? '—' }}</span>
+              <span class="change-to">{{ log.changes[key].to | safeValue }}</span>
             </div>
           </ng-container>
           <span *ngIf="!hasChanges(log)" style="color:#adb5bd; font-size:0.8rem">
@@ -101,7 +101,8 @@
 
 <!-- Modal detalle completo -->
 <p-dialog header="Detalle del registro" [(visible)]="showDetail"
-          [modal]="true" [style]="{ width: '560px' }" [draggable]="false">
+          [modal]="true" [style]="{ width: '560px' }" [draggable]="false"
+          appendTo="body">
   <div *ngIf="selectedLog" class="log-detail">
 
     <div class="detail-row">
@@ -109,7 +110,8 @@
       <strong>{{ selectedLog.logged_at | date:'dd/MM/yyyy HH:mm:ss' }}</strong>
     </div>
     <div class="detail-row">
-      <span>Usuario</span><strong>{{ selectedLog.user_name }}</strong>
+      <span>Usuario</span>
+      <strong>{{ selectedLog.user_name }}</strong>
     </div>
     <div class="detail-row">
       <span>Acción</span>
@@ -125,7 +127,8 @@
       <code>{{ selectedLog.model_id }}</code>
     </div>
     <div class="detail-row">
-      <span>IP</span><strong>{{ selectedLog.ip_address }}</strong>
+      <span>IP</span>
+      <strong>{{ selectedLog.ip_address }}</strong>
     </div>
 
     <!-- Cambios detallados -->
@@ -134,12 +137,14 @@
       <p style="font-weight:600; margin-bottom:.75rem">Cambios realizados</p>
       <div class="changes-table">
         <div class="changes-header">
-          <span>Campo</span><span>Valor anterior</span><span>Valor nuevo</span>
+          <span>Campo</span>
+          <span>Valor anterior</span>
+          <span>Valor nuevo</span>
         </div>
         <div *ngFor="let key of changeKeys(selectedLog)" class="changes-row">
-          <span class="field-name">{{ key }}</span>
-          <span class="old-val">{{ selectedLog.changes[key].from ?? '—' }}</span>
-          <span class="new-val">{{ selectedLog.changes[key].to ?? '—' }}</span>
+          <span class="field-name">{{ formatFieldName(key) }}</span>
+          <span class="old-val">{{ selectedLog.changes[key].from | safeValue }}</span>
+          <span class="new-val">{{ selectedLog.changes[key].to | safeValue }}</span>
         </div>
       </div>
     </ng-container>
@@ -149,9 +154,9 @@
       <p-divider></p-divider>
       <p style="font-weight:600; margin-bottom:.75rem">Datos del registro creado</p>
       <div class="changes-table">
-        <div *ngFor="let key of (selectedLog.new_values | keyvalue)" class="changes-row two-col">
-          <span class="field-name">{{ key.key }}</span>
-          <span class="new-val">{{ key.value }}</span>
+        <div *ngFor="let item of getNewValueEntries(selectedLog)" class="changes-row two-col">
+          <span class="field-name">{{ formatFieldName(item.key) }}</span>
+          <span class="new-val">{{ item.value | safeValue }}</span>
         </div>
       </div>
     </ng-container>

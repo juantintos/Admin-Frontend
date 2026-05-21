@@ -15,11 +15,12 @@ export class AuthService {
     this.getStoredUser()
   );
 
+  private isLoggingOut = false; // ← bandera anti-loop
+
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // ── Login ────────────────────────────────────────────
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.API}/auth/login`, credentials).pipe(
       tap(response => {
@@ -32,20 +33,27 @@ export class AuthService {
     );
   }
 
-  // ── Logout ───────────────────────────────────────────
   logout(): void {
-    this.http.post(`${this.API}/auth/logout`, {}).subscribe({
-      complete: () => this.clearSession(),
-      error:    () => this.clearSession(),
-    });
+    // Evitar loop infinito
+    if (this.isLoggingOut) return;
+    this.isLoggingOut = true;
+
+    const token = this.getToken();
+
+    if (token) {
+      this.http.post(`${this.API}/auth/logout`, {}).subscribe({
+        complete: () => this.clearSession(),
+        error:    () => this.clearSession(), // aunque falle, limpia igual
+      });
+    } else {
+      this.clearSession();
+    }
   }
 
-  // ── Recuperar contraseña ─────────────────────────────
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.API}/auth/forgot-password`, { email });
   }
 
-  // ── Helpers ──────────────────────────────────────────
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -76,6 +84,7 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);
+    this.isLoggingOut = false;
     this.router.navigate(['/auth/login']);
   }
 }

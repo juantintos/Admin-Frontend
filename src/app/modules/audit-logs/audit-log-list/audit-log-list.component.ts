@@ -50,4 +50,27 @@ export class AuditLogListComponent implements OnInit {
   actionSeverity(action: string): string { return ({ created: 'success', updated: 'warning', deleted: 'danger' } as any)[action] ?? 'info'; }
   hasChanges(log: AuditLog): boolean { return !!log.changes && Object.keys(log.changes).length > 0; }
   changeKeys(log: AuditLog): string[] { return Object.keys(log.changes ?? {}); }
+  getNewValueEntries(log: AuditLog): { key: string; value: any }[] {
+    if (!log?.new_values) {
+      return [];
+    }
+    return Object.entries(log.new_values)
+      .map(([key, value]) => ({ key, value }));
+  }
+  fieldLabels: Record<string, string> = {
+  name: 'Nombre',
+  brand: 'Marca',
+  price: 'Precio',
+  code: 'Código',
+  email: 'Correo',
+  phone: 'Teléfono',
+  profile_id: 'Perfil',
+  is_active: 'Activo',
+  created_at: 'Fecha de creación',
+  updated_at: 'Fecha de actualización',
+  
+  };
+  formatFieldName(field: string): string {
+  return this.fieldLabels[field] || field;
+}
 }

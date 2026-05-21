@@ -24,6 +24,7 @@ import { DividerModule }         from 'primeng/divider';
 import { InputNumberModule }     from 'primeng/inputnumber';
 import { TooltipModule }         from 'primeng/tooltip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SafeValuePipe }         from '../pipes/safe-value.pipe';
 
 const PRIMENG_MODULES = [
   TableModule, ButtonModule, InputTextModule, DialogModule,
@@ -35,6 +36,9 @@ const PRIMENG_MODULES = [
 ];
 
 @NgModule({
+  declarations: [
+    SafeValuePipe,
+  ],
   imports: [
     CommonModule,
     RouterModule,
@@ -47,6 +51,7 @@ const PRIMENG_MODULES = [
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
+    SafeValuePipe,
     ...PRIMENG_MODULES,
   ],
 })

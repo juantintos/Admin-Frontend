@@ -53,7 +53,7 @@
           </div>
         </td>
         <td style="text-align:center">
-          <p-badge [value]="profile.users_count ?? 0" severity="info"></p-badge>
+         <p-badge [value]="(profile.users_count ?? 0).toString()" severity="info"></p-badge>
         </td>
         <td>{{ profile.created_at | date:'dd/MM/yyyy' }}</td>
         <td>
@@ -95,7 +95,8 @@
     <div class="detail-row"><span>Nombre</span><strong>{{ detailProfile.name }}</strong></div>
     <div class="detail-row">
       <span>Usuarios asignados</span>
-      <p-badge [value]="detailProfile?.users_count ?? 0" severity="info"></p-badge>
+      <!-- El badge necesita string en PrimeNG 19 -->
+      <p-badge [value]="(detailProfile.users_count ?? 0).toString()" severity="info"></p-badge>
     </div>
     <div class="detail-row"><span>Creación</span>
       <strong>{{ detailProfile?.created_at | date:'dd/MM/yyyy HH:mm' }}</strong>

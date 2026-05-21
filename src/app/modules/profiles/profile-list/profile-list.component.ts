@@ -42,7 +42,15 @@ export class ProfileListComponent implements OnInit {
   onPageChange(e: any): void { this.currentPage = Math.floor(e.first / e.rows) + 1; this.rows = e.rows; this.load(); }
   openCreate(): void { this.editProfile = null; this.showForm = true; }
   openEdit(p: Profile): void { this.editProfile = { ...p }; this.showForm = true; }
-  openDetail(p: Profile): void { this.detailProfile = p; this.showDetail = true; }
+  openDetail(p: Profile): void {
+  // Cargar el detalle completo desde la API
+  this.profileService.getById(p.id).subscribe({
+    next: res => {
+      this.detailProfile = res.data;
+      this.showDetail = true;
+    },
+  });
+}
   onFormSaved(): void { this.showForm = false; this.load(); }
 
   confirmDelete(profile: Profile): void {

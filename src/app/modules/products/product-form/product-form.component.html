@@ -3,38 +3,37 @@
   [(visible)]="visible"
   [modal]="true"
   [style]="{ width: '480px' }"
-  [breakpoints]="{
-    '960px': '75vw',
-    '640px': '95vw'
-  }"
-  [responsive]="true"
   [draggable]="false"
-  [closable]="true"
-  [dismissableMask]="true"
-  (onHide)="close()"
+  [resizable]="false"
+  appendTo="body"
 >
   <form [formGroup]="form" novalidate>
     <div class="field">
-      <label>Nombre <span style="color:red">*</span></label>
+      <label>Nombre <span class="required">*</span></label>
       <input pInputText formControlName="name" placeholder="Ej: Laptop Pro"
+             style="width:100%"
              [class.ng-invalid]="f['name'].invalid && f['name'].touched" />
       <small style="color:red" *ngIf="f['name'].invalid && f['name'].touched">
         El nombre es requerido.
       </small>
     </div>
+
     <div class="field">
-      <label>Marca <span style="color:red">*</span></label>
+      <label>Marca <span class="required">*</span></label>
       <input pInputText formControlName="brand" placeholder="Ej: Dell"
+             style="width:100%"
              [class.ng-invalid]="f['brand'].invalid && f['brand'].touched" />
       <small style="color:red" *ngIf="f['brand'].invalid && f['brand'].touched">
         La marca es requerida.
       </small>
     </div>
+
     <div class="field">
-      <label>Precio <span style="color:red">*</span></label>
+      <label>Precio <span class="required">*</span></label>
       <p-inputNumber formControlName="price" mode="decimal"
                      [minFractionDigits]="2" [maxFractionDigits]="2"
                      [min]="0" [max]="999" placeholder="0.00"
+                     styleClass="w-full"
                      [class.ng-invalid]="f['price'].invalid && f['price'].touched">
       </p-inputNumber>
       <small style="color:red" *ngIf="f['price'].invalid && f['price'].touched">
@@ -42,10 +41,12 @@
       </small>
     </div>
   </form>
+
   <ng-template pTemplate="footer">
     <button pButton label="Cancelar" icon="pi pi-times"
             class="p-button-text" (click)="close()"></button>
     <button pButton [label]="isEdit ? 'Actualizar' : 'Crear'"
-            icon="pi pi-check" [loading]="loading" (click)="submit()"></button>
+            icon="pi pi-check" [loading]="loading"
+            (click)="submit()"></button>
   </ng-template>
 </p-dialog>

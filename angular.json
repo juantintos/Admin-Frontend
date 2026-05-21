@@ -33,7 +33,13 @@
             "assets": [
               { "glob": "**/*", "input": "public" }
             ],
-            "styles": ["src/styles.scss"],
+            
+            "styles": [
+              "src/styles.scss",
+              "node_modules/primeicons/primeicons.css",
+              "node_modules/primeicons/primeicons.css"
+            ],
+            
             "scripts": []
           },
           "configurations": {

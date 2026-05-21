@@ -44,19 +44,46 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void { this.loadStats(); this.loadRecentLogs(); }
 
   private loadStats(): void {
-    const calls: any = {};
-    if (this.authService.hasPermission('products')) calls['products'] = this.productService.getAll({ per_page: 1 });
-    if (this.authService.hasPermission('users'))    calls['users']    = this.userService.getAll({ per_page: 1 });
-    if (this.authService.hasPermission('profiles')) calls['profiles'] = this.profileService.getAll({ per_page: 1 });
-    if (!Object.keys(calls).length) return;
-    forkJoin(calls).subscribe((results: any) => {
-      this.stats = this.stats.map(s => {
-        const key = s.label.toLowerCase();
-        if (results[key]) s.value = results[key].data.total;
-        return s;
-      });
-    });
+  const calls: any = {};
+
+  if (this.authService.hasPermission('products')) {
+    calls['products'] = this.productService.getAll({ per_page: 1 });
   }
+
+  if (this.authService.hasPermission('users')) {
+    calls['users'] = this.userService.getAll({ per_page: 1 });
+  }
+
+  if (this.authService.hasPermission('profiles')) {
+    calls['profiles'] = this.profileService.getAll({ per_page: 1 });
+  }
+
+  if (!Object.keys(calls).length) return;
+
+  forkJoin(calls).subscribe((results: any) => {
+
+    this.stats = this.stats.map(stat => {
+
+      switch (stat.permission) {
+
+        case 'products':
+          stat.value = results['products']?.data?.total ?? 0;
+          break;
+
+        case 'users':
+          stat.value = results['users']?.data?.total ?? 0;
+          break;
+
+        case 'profiles':
+          stat.value = results['profiles']?.data?.total ?? 0;
+          break;
+      }
+
+      return stat;
+    });
+
+  });
+}
 
   private loadRecentLogs(): void {
     if (!this.authService.hasPermission('profiles')) return;

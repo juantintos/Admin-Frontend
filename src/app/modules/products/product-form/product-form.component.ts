@@ -53,5 +53,8 @@ export class ProductFormComponent implements OnChanges {
     });
   }
 
-  close(): void { this.visibleChange.emit(false); this.form.reset(); }
+  close(): void { 
+    this.visibleChange.emit(false);
+    this.form.reset();
+    this.form.reset(); }
 }

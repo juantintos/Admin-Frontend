@@ -62,3 +62,42 @@ body {
   gap: 0.25rem;
   justify-content: center;
 }
+
+// Fix PrimeNG dialog overlay
+.p-dialog-mask {
+  z-index: 1000 !important;
+}
+
+.p-dialog {
+  z-index: 1001 !important;
+}
+
+.p-component-overlay {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+// Fix inputnumber width
+.p-inputnumber {
+  width: 100%;
+  
+  .p-inputnumber-input {
+    width: 100%;
+  }
+}
+
+// Fix primeflex
+.w-full { width: 100% !important; }
+
+// Fix overlay del dialog
+.p-overlay-mask {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.p-dialog {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+// Fix que el dialog aparezca correctamente
+.p-component-overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
